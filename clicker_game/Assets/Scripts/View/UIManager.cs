@@ -34,6 +34,16 @@ public class UIManager : MonoBehaviour
     public GameObject AchievementsPan;
 
     /// <summary>
+    /// Панель для ресурсов
+    /// </summary>
+    public GameObject ResourcesPan;
+
+    /// <summary>
+    /// Стартовое меню
+    /// </summary>
+    public GameObject StartPan;
+
+    /// <summary>
     /// Переключает видимость панели магазина.
     /// Если панель открыта — закроет.
     /// Если закрыта — откроет.
@@ -65,5 +75,21 @@ public class UIManager : MonoBehaviour
     public void ToggleAchievements()
     {
         AchievementsPan.SetActive(!AchievementsPan.activeSelf);
+    }
+
+    /// <summary>
+    /// Показывает или скрывает панель ресурсов
+    /// </summary>
+    public void ToggleResources()
+    {
+        ResourcesPan.SetActive(!ResourcesPan.activeSelf);
+    }
+
+    /// <summary>
+    /// Показывает или скрывает стартовое меню
+    /// </summary>
+    public void ToggleStart()
+    {
+        StartPan.SetActive(!StartPan.activeSelf);
     }
 }
