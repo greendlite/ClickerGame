@@ -6,19 +6,29 @@ using System;
 
 public class Game : MonoBehaviour
 {
-    [SerializeField] int Score;
+    public int Score;
     public int[] CostInt;
     private int ClickScore = 1;
     public int[] CostBonus;
     private int TotalBonus;
 
-    public GameObject ShopPan;
-    public GameObject BonusPan;
-    public GameObject SettingsPan;
-    public GameObject AchievementsPan;
+    public ShopView shopView;
 
-    public Text[] CostText;
-    public Text ScoreText;
+    public Text CopperText;
+    public Text IronText;
+    public Text DiamondText;
+
+    public int[] OresCount = new int[3];
+
+    //public GameObject ShopPan;
+    //public GameObject BonusPan;
+    //public GameObject SettingsPan;
+    //public GameObject AchievementsPan;
+
+    //это убрать(ShopView)
+    //public Text[] CostText;
+
+    //public Text ScoreText;
 
     private Save sv = new();
 
@@ -59,7 +69,7 @@ public class Game : MonoBehaviour
             for (int i = 0; i < 2; i++)
             {
                 CostInt[i] = sv.CostInt[i];
-                CostText[i].text = sv.CostInt[i] + "$";
+                //CostText[i].text = sv.CostInt[i] + "$";
             }
         }
     }
@@ -80,7 +90,32 @@ public class Game : MonoBehaviour
         {
             Achievement1Max++;
         }
+
+        // Начисление очков
         Score += ClickScore;
+
+        // Выпадение руды
+        int chance = UnityEngine.Random.Range(0, 100); // 0..99
+
+        if (chance < 5)
+        {
+            // Алмаз — 5%
+            OresCount[2]++;
+        }
+        else if (chance < 35)
+        {
+            // Железо — 30% (5–34)
+            OresCount[1]++;
+        }
+        else
+        {
+            // Медь — 65% (35–99)
+            OresCount[0]++;
+        }
+
+        //Для обновления
+        UpdateOreTexts();
+
         if (Achievement1Max >= 100 && !isAchievement1)
         {
             isAchievement1 = true;
@@ -88,9 +123,18 @@ public class Game : MonoBehaviour
         }
     }
 
+
+    private void UpdateOreTexts()
+    {
+        CopperText.text = "Медь: " + OresCount[0].ToString();
+        IronText.text = "Железо: " + OresCount[1].ToString();
+        DiamondText.text = "Алмазы: " + OresCount[2].ToString();
+    }
+
+
     private void Update()
     {
-        ScoreText.text = Score + "$";
+        //ScoreText.text = Score + "$";
 
         Achievement1NameText.text = "Нажмите " + Achievement1Max + "/100 раз";
 
@@ -115,25 +159,25 @@ public class Game : MonoBehaviour
             AchievementsCost[2].text = "Получено";
     }
 
-    public void ShowAndHideShopPan()
+    /*public void ShowAndHideShopPan()
     {
         ShopPan.SetActive(!ShopPan.activeSelf);
-    }
+    }*/
 
-    public void ShowAndHideBonusPan()
+    /*public void ShowAndHideBonusPan()
     {
         BonusPan.SetActive(!BonusPan.activeSelf);
-    }
+    }*/
 
-    public void ShowAndHideSettingsPan()
+    /*public void ShowAndHideSettingsPan()
     {
         SettingsPan.SetActive(!SettingsPan.activeSelf);
-    }
+    }*/
 
-    public void ShowAndHideAchievementsPan()
+    /*public void ShowAndHideAchievementsPan()
     {
         AchievementsPan.SetActive(!AchievementsPan.activeSelf);
-    }
+    }*/
 
     public void OnClickBuyLevel()
     {
@@ -142,8 +186,10 @@ public class Game : MonoBehaviour
             Score -= CostInt[0];
             CostInt[0] *= 2;
             ClickScore *= 2;
-            CostText[0].text = CostInt[0] + "$";
-            
+            //CostText[0].text = CostInt[0] + "$";
+
+            shopView.RefreshUI();
+
             isAchievement2 = true;
         }
     }
@@ -155,7 +201,7 @@ public class Game : MonoBehaviour
             Score -= CostInt[1];
             CostInt[1] *= 2;
             CostBonus[0] += 2;
-            CostText[1].text = CostInt[1] + "$";
+            //CostText[1].text = CostInt[1] + "$";
             
             isAchievement3 = true;
         }
