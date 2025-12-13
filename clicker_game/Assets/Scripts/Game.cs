@@ -20,6 +20,52 @@ public class Game : MonoBehaviour
 
     public int[] OresCount = new int[3];
 
+
+    [Header("Floating Ore")]
+    [SerializeField] public FloatingOreView floatingOrePrefab;
+    [SerializeField] public Transform floatingOreParent;
+
+    [SerializeField] private Sprite copperSprite;
+    [SerializeField] private Sprite ironSprite;
+    [SerializeField] private Sprite diamondSprite;
+
+    private void ShowFloatingOre(int oreType, int amount)
+    {
+        FloatingOreView view = Instantiate(
+            floatingOrePrefab,
+            floatingOreParent
+        );
+
+        Sprite icon = oreType switch
+        {
+            0 => copperSprite,
+            1 => ironSprite,
+            2 => diamondSprite,
+            _ => null
+        };
+
+        view.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        view.Init(icon, amount);
+    }
+
+    [SerializeField] private int copperPrice = 1;
+    [SerializeField] private int ironPrice = 5;
+    [SerializeField] private int diamondPrice = 50;
+
+    // Метод продажи всей руды
+    public void SellAllOres()
+    {
+        Score += OresCount[0] * copperPrice;
+        Score += OresCount[1] * ironPrice;
+        Score += OresCount[2] * diamondPrice;
+
+        // Обнуляем руду после продажи
+        OresCount[0] = 0;
+        OresCount[1] = 0;
+        OresCount[2] = 0;
+
+        UpdateOreTexts();
+    }
     //public GameObject ShopPan;
     //public GameObject BonusPan;
     //public GameObject SettingsPan;
@@ -69,8 +115,13 @@ public class Game : MonoBehaviour
             for (int i = 0; i < 2; i++)
             {
                 CostInt[i] = sv.CostInt[i];
-                //CostText[i].text = sv.CostInt[i] + "$";
             }
+
+            // Загружаем руду
+            for (int i = 0; i < 3; i++)
+                OresCount[i] = sv.OresCount[i];
+
+            UpdateOreTexts();
         }
     }
 
@@ -92,7 +143,7 @@ public class Game : MonoBehaviour
         }
 
         // Начисление очков
-        Score += ClickScore;
+        //Score += ClickScore;
 
         // Выпадение руды
         int chance = UnityEngine.Random.Range(0, 100); // 0..99
@@ -101,16 +152,19 @@ public class Game : MonoBehaviour
         {
             // Алмаз — 5%
             OresCount[2]++;
+            ShowFloatingOre(2, 1);
         }
         else if (chance < 35)
         {
             // Железо — 30% (5–34)
             OresCount[1]++;
+            ShowFloatingOre(1, 1);
         }
         else
         {
             // Медь — 65% (35–99)
             OresCount[0]++;
+            ShowFloatingOre(0, 1);
         }
 
         //Для обновления
@@ -159,40 +213,20 @@ public class Game : MonoBehaviour
             AchievementsCost[2].text = "Получено";
     }
 
-    /*public void ShowAndHideShopPan()
-    {
-        ShopPan.SetActive(!ShopPan.activeSelf);
-    }*/
+    //public void OnClickBuyLevel()
+    //{
+    //    if (Score >= CostInt[0])
+    //    {
+    //        Score -= CostInt[0];
+    //        CostInt[0] *= 2;
+    //        ClickScore *= 2;
+    //        //CostText[0].text = CostInt[0] + "$";
 
-    /*public void ShowAndHideBonusPan()
-    {
-        BonusPan.SetActive(!BonusPan.activeSelf);
-    }*/
+    //        shopView.RefreshUI();
 
-    /*public void ShowAndHideSettingsPan()
-    {
-        SettingsPan.SetActive(!SettingsPan.activeSelf);
-    }*/
-
-    /*public void ShowAndHideAchievementsPan()
-    {
-        AchievementsPan.SetActive(!AchievementsPan.activeSelf);
-    }*/
-
-    public void OnClickBuyLevel()
-    {
-        if (Score >= CostInt[0])
-        {
-            Score -= CostInt[0];
-            CostInt[0] *= 2;
-            ClickScore *= 2;
-            //CostText[0].text = CostInt[0] + "$";
-
-            shopView.RefreshUI();
-
-            isAchievement2 = true;
-        }
-    }
+    //        isAchievement2 = true;
+    //    }
+    //}
 
     public void OnClickBuyBonusShop()
     {
@@ -241,12 +275,17 @@ public class Game : MonoBehaviour
                 sv.CostInt[i] = CostInt[i];
             }
 
+            // Сохраняем руду
+            for (int i = 0; i < 3; i++)
+                sv.OresCount[i] = OresCount[i];
+
             sv.Date[0] = DateTime.Now.Year;
             sv.Date[1] = DateTime.Now.Month;
             sv.Date[2] = DateTime.Now.Day;
             sv.Date[3] = DateTime.Now.Hour;
             sv.Date[4] = DateTime.Now.Minute;
             sv.Date[5] = DateTime.Now.Second;
+
 
             PlayerPrefs.SetString("SV", JsonUtility.ToJson(sv));
         }
@@ -274,6 +313,10 @@ public class Game : MonoBehaviour
         {
             sv.CostInt[i] = CostInt[i];
         }
+
+        // Сохраняем руду
+        for (int i = 0; i < 3; i++)
+            sv.OresCount[i] = OresCount[i];
 
         sv.Date[0] = DateTime.Now.Year;
         sv.Date[1] = DateTime.Now.Month;
@@ -330,4 +373,7 @@ public class Save
     public bool isAchievement3Get;
     
     public int Achievement1Max;
+
+    // Добавляем сохранение руды
+    public int[] OresCount = new int[3];
 }
