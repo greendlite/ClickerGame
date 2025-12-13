@@ -66,6 +66,26 @@ public class Game : MonoBehaviour
 
         UpdateOreTexts();
     }
+
+
+    private int pickaxeLevel = 1;       // уровень кирки
+    private int oreMultiplier = 1;      // множитель добычи
+
+
+    public void OnClickBuyPickaxe()
+    {
+        int pickaxeCost = 1000 * pickaxeLevel; // цена растет с уровнем
+
+        if (Score >= pickaxeCost)
+        {
+            Score -= pickaxeCost;
+            pickaxeLevel++;
+            oreMultiplier *= 2; // удваиваем добычу
+            shopView.RefreshUI();
+            Debug.Log($"Кирка улучшена до уровня {pickaxeLevel}! Добыча теперь x{oreMultiplier}");
+        }
+    }
+
     //public GameObject ShopPan;
     //public GameObject BonusPan;
     //public GameObject SettingsPan;
@@ -142,6 +162,8 @@ public class Game : MonoBehaviour
             Achievement1Max++;
         }
 
+        int amount = 1 * oreMultiplier;  // базовая единица * множитель
+
         // Начисление очков
         //Score += ClickScore;
 
@@ -151,20 +173,20 @@ public class Game : MonoBehaviour
         if (chance < 5)
         {
             // Алмаз — 5%
-            OresCount[2]++;
-            ShowFloatingOre(2, 1);
+            OresCount[2] += amount;
+            ShowFloatingOre(2, amount);
         }
         else if (chance < 35)
         {
             // Железо — 30% (5–34)
-            OresCount[1]++;
-            ShowFloatingOre(1, 1);
+            OresCount[1] += amount;
+            ShowFloatingOre(1, amount);
         }
         else
         {
             // Медь — 65% (35–99)
-            OresCount[0]++;
-            ShowFloatingOre(0, 1);
+            OresCount[0] += amount;
+            ShowFloatingOre(0, amount);
         }
 
         //Для обновления

@@ -6,12 +6,21 @@ public class ShopView : MonoBehaviour
     public Game Game; // ссылка на твой Game.cs
     public Text[] CostTexts; // тексты стоимости для апгрейдов
     public Button SellAllButton;
+    public Button BuyPickaxeButton;
+
 
     private void Start()
     {
         SellAllButton.onClick.AddListener(() =>
         {
+          
             Game.SellAllOres();
+        });
+
+        // Остальные слушатели
+        BuyPickaxeButton.onClick.AddListener(() =>
+        {
+            Game.OnClickBuyPickaxe();
         });
     }
 
