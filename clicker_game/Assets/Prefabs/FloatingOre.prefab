@@ -60,7 +60,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3188401520389775883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff3cc079ce702ab459ce8274c3ce6d0d, type: 3}
+  m_Script: {fileID: 11500000, guid: 36dbf8d2962d3104bbedcaee4e924b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloatingOreView
   oreIcon: {fileID: 8514789758649473157}
@@ -174,8 +174,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 166.3028, y: 86}
-  m_SizeDelta: {x: 491.3855, y: 72}
+  m_AnchoredPosition: {x: 15.788208, y: 86}
+  m_SizeDelta: {x: 190.3563, y: 72}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &140075785075576576
 CanvasRenderer:
