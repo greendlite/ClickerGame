@@ -17,7 +17,7 @@ public class Game : MonoBehaviour
     public Text DiamondName;
 
     public int[] OresCount = new int[4];
-
+    //koment
     [Header("Кирки")]
     [SerializeField] private Pickaxe[] pickaxes; // Массив кирок
     [SerializeField] private Button[] pickaxeButtons; // Кнопки для покупки кирок
